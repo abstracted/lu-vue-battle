@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Monster Slayer</title>
+</head>
+<body>
+<div id="app">
+    <div class="logo"><span class="logo-mod">B</span>attle <span class="logo-mod">R</span>oyale<span
+            class="logo-mod">!</span></div>
+    <section class="row">
+        <div class="small-6 columns">
+            <h1 class="text-center">{{ players[0].name }}</h1>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: green; margin: 0; color: white;"
+                     :style=" {width: healthPercent(players[0]) + '% !important'}"><p class="statustext">hp:
+                    {{ players[0].healthPoints }}</p>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: coral; margin: 0; color: white;"
+                     :style=" {width: statPercent(players[0], 'special') + '% !important'}"><p
+                        class="statustext">sp:
+                    {{ players[0].special.counter }}</p>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: rebeccapurple; margin: 0; color: white;"
+                     :style=" {width: statPercent(players[0], 'magic') + '% !important'}"><p
+                        class="statustext">mp:
+                    {{ players[0].magic.counter }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="small-6 columns">
+            <h1 class="text-center">{{ players[1].name }}</h1>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: green; margin: 0; color: white;"
+                     :style=" {width: healthPercent(players[1]) + '% !important'}"><p class="statustext">hp:
+                    {{ players[1].healthPoints }}</p>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: coral; margin: 0; color: white;"
+                     :style=" {width: statPercent(players[1], 'special') + '% !important'}"><p
+                        class="statustext">sp:
+                    {{ players[1].special.counter }}</p>
+                </div>
+            </div>
+            <div class="statusbar">
+                <div class="statusbar text-center" style="background-color: rebeccapurple; margin: 0; color: white;"
+                     :style=" {width: statPercent(players[1], 'magic') + '% !important'}"><p
+                        class="statustext">mp:
+                    {{ players[1].magic.counter }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="row controls">
+        <div class="small-12 columns">
+            <button id="start-game" :disabled="gameRunning" @click="startGame">START NEW GAME</button>
+        </div>
+    </section>
+    <section class="row controls" v-if="gameRunning">
+        <div class="small-12 columns">
+            <button id="attack"
+                    :disabled="activePlayer !== 0"
+                    @click="attack(false)">ATTACK
+            </button>
+            <button id="special-attack"
+                    :class="{flashing: players[0].special.canSpecial}"
+                    :disabled="activePlayer !== 0 || !players[0].special.canSpecial"
+                    @click="attack(true)">SPECIAL ATTACK
+            </button>
+            <button id="heal"
+                    :class="{flashing: players[0].magic.canMagic}"
+                    :disabled="activePlayer !== 0 || !players[0].magic.canMagic"
+                    @click="heal()">HEAL
+            </button>
+            <button :disabled="!gameRunning" id="give-up" @click="gameOver()">GIVE UP</button>
+        </div>
+    </section>
+    <section class="row log" v-if="log.length > 0">
+        <div class="small-12 columns">
+            <ul>
+                <li v-for="(entry, i) of log"
+                    :class="{'player-turn': entry[0] === 0, 'monster-turn': entry[0] === 1}">
+                    {{ entry[1] }}
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+<script src="//npmcdn.com/vue/dist/vue.js"></script>
+<script src="js/app.js"></script>
+<link rel="stylesheet" href="css/foundation.min.css">
+<link rel="stylesheet" href="css/app.css">
+</body>
+</html>
